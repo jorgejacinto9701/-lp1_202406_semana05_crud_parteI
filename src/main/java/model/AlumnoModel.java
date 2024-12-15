@@ -265,6 +265,94 @@ public class AlumnoModel {
 		}
 		return lstSalida;
 	}
+	
+	public int eliminarFisico(int idAlumno) {
+		int salida = -1;
+		Connection con = null;
+		PreparedStatement pstm = null;
+		try {
+			con = MySqlDBConexion.getConexion();
+			String sql = "delete from alumno where idAlumno = ?";
+			pstm = con.prepareStatement(sql);
+			pstm.setInt(1, idAlumno);
+			salida = pstm.executeUpdate();
+			System.out.println("SQL : " + pstm.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (pstm != null)
+					pstm.close();
+				if (con != null)
+					con.close();
+			} catch (Exception e2) {
+			}
+		}
+		return salida;
+	}
+	
+	public int eliminarLogico(int idAlumno, int estado) {
+		int salida = -1;
+        Connection con = null;
+        PreparedStatement pstm = null;
+        try {
+            con = MySqlDBConexion.getConexion();
+            String sql = "update alumno set estado = ? where idAlumno = ?";
+            pstm = con.prepareStatement(sql);
+            pstm.setInt(1, estado);
+            pstm.setInt(2, idAlumno);
+            salida = pstm.executeUpdate();
+            System.out.println("SQL : " + pstm.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (pstm != null)
+                    pstm.close();
+                if (con != null)
+                    con.close();
+            } catch (Exception e2) {
+            }
+        }
+        return salida;
+   }
+	
+	public int acualizaAlumno(Alumno obj) {
+		int salida = -1;
+		Connection con = null;
+		PreparedStatement pstm = null;
+		try {
+			
+			con = MySqlDBConexion.getConexion();
+			String sql = "update alumno set nombres = ?, apellidos = ?, "
+						+ "telefono = ?, dni = ?, correo = ?, fechaNacimiento = ?, "
+						+ "fechaActualizacion = ?, idPais = ? where idAlumno = ?";
+			pstm = con.prepareStatement(sql);
+			pstm.setString(1, obj.getNombres());
+			pstm.setString(2, obj.getApellidos());
+			pstm.setString(3, obj.getTelefono());
+			pstm.setString(4, obj.getDni());
+			pstm.setString(5, obj.getCorreo());
+			pstm.setDate(6, obj.getFechaNacimiento());
+			pstm.setTimestamp(7, obj.getFechaActualizacion());
+			pstm.setInt(8, obj.getPais().getIdPais());
+			pstm.setInt(9, obj.getIdAlumno());
+			
+			salida = pstm.executeUpdate();
+			System.out.println("SQL : " + pstm.toString());
+		}catch (Exception e) {
+            e.printStackTrace();
+		} finally {
+            try {
+                if (pstm != null)
+                    pstm.close();
+                if (con != null)
+                    con.close();
+            } catch (Exception e2) {}
+		}
+		return salida;
+	}
+	
 }
 
 
